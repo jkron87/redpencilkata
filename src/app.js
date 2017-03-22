@@ -17,9 +17,7 @@ Item.prototype.priceChange = function (amount) {
     this.reduceBy(amount);
 
     if (totalReductionDoesNotExceedThreshold) {
-        if (priceChangeWithinRange && priceStable) {
-            this.startPromo();
-        } else if (!priceStable && this.promoStarted > setDateTo31DaysAgo()) {
+        if (priceChangeWithinRange && priceStable || !priceStable && this.promoStarted === true) {
             this.startPromo();
         }
     } else {
