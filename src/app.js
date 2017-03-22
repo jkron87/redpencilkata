@@ -16,10 +16,12 @@ Item.prototype.priceChange = function (amount) {
     this.lastDateChanged = new Date();
     this.reduceBy(amount);
 
-    if (priceChangeWithinRange && totalReductionDoesNotExceedThreshold && priceStable) {
-        this.startPromo();
-    } else if (!priceStable && this.promoStarted > setDateTo31DaysAgo() && totalReductionDoesNotExceedThreshold){
-        this.startPromo();
+    if (totalReductionDoesNotExceedThreshold) {
+        if (priceChangeWithinRange && priceStable) {
+            this.startPromo();
+        } else if (!priceStable && this.promoStarted > setDateTo31DaysAgo()) {
+            this.startPromo();
+        }
     } else {
         this.endPromo();
     }
@@ -36,7 +38,7 @@ Item.prototype.promoIsActive = function () {
 Item.prototype.startPromo = function () {
     this.isInPromo = true;
     if (this.promoStarted <= setDateTo31DaysAgo()) {
-    this.promoStarted = new Date();
+        this.promoStarted = new Date();
     }
 };
 
