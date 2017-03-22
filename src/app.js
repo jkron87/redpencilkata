@@ -1,4 +1,5 @@
 "use strict";
+
 function Item(price) {
     this.isInPromo = false;
     this.currentPrice = price;
@@ -8,7 +9,7 @@ function Item(price) {
 }
 
 Item.prototype.priceChange = function (amount) {
-    let priceChangeWithinRange = amount <= -.05 && amount > -.3 ;
+    let priceChangeWithinRange = amount <= -.05 && amount > -.3;
     let priceStable = this.lastDateChanged <= setDateTo31DaysAgo();
     let totalReductionDoesNotExceedThreshold = (((this.originalPrice - this.currentPrice) / this.originalPrice) - amount) < 3;
 
@@ -22,7 +23,15 @@ Item.prototype.priceChange = function (amount) {
     }
 };
 
-Item.prototype.startPromo = function() {
+Item.prototype.promoIsActive = function () {
+    if (this.promoStarted > setDateTo31DaysAgo()) {
+        return true;
+    }
+    this.endPromo();
+    return false;
+};
+
+Item.prototype.startPromo = function () {
     this.isInPromo = true;
     this.promoStarted = new Date();
 };
@@ -35,7 +44,7 @@ Item.prototype.reduceBy = function (amount) {
     this.currentPrice = this.currentPrice * ((1 + amount) * 10) / 10;
 };
 
-function setDateTo31DaysAgo () {
+function setDateTo31DaysAgo() {
     let date = new Date();
     date.setDate(date.getDate() - 31);
     return date;
